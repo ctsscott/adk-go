@@ -26,6 +26,7 @@ import (
 	"google.golang.org/adk/artifactservice"
 	"google.golang.org/adk/cmd/restapi/services"
 	"google.golang.org/adk/cmd/web"
+	"google.golang.org/adk/examples/web/agents"
 	"google.golang.org/adk/llm"
 	"google.golang.org/adk/llm/gemini"
 	"google.golang.org/adk/sessionservice"
@@ -49,9 +50,10 @@ func saveReportfunc(ctx agent.Context, llmResponse *llm.Response, llmResponseErr
 
 func main() {
 	ctx := context.Background()
+	apiKey := os.Getenv("GOOGLE_API_KEY")
 
 	model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
-		APIKey: os.Getenv("GEMINI_API_KEY"),
+		APIKey: apiKey,
 	})
 	if err != nil {
 		log.Fatalf("Failed to create model: %v", err)
@@ -70,10 +72,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create agent: %v", err)
 	}
+	llmAuditor := agents.GetLLmAuditorAgent(ctx, apiKey)
 
 	agentLoader := services.NewStaticAgentLoader(
 		map[string]agent.Agent{
 			"weather_time_agent": rootAgent,
+			"llm_auditor":        llmAuditor,
 		},
 	)
 	artifactservice := artifactservice.Mem()

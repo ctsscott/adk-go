@@ -15,6 +15,7 @@ require (
 require github.com/google/jsonschema-go v0.2.0
 
 require (
+	github.com/awalterschulze/gographviz v2.0.3+incompatible
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/rs/cors v1.11.1
 	github.com/spf13/cobra v1.8.1

@@ -28,8 +28,9 @@ func SetupRouter(router *mux.Router, routerConfig *config.ADKAPIRouterConfigs) *
 		routers.NewSessionsAPIRouter(handlers.NewSessionsAPIController(routerConfig.SessionService)),
 		routers.NewRuntimeAPIRouter(handlers.NewRuntimeAPIRouter(routerConfig.SessionService, routerConfig.AgentLoader, routerConfig.ArtifactService)),
 		routers.NewAppsAPIRouter(handlers.NewAppsAPIController(routerConfig.AgentLoader)),
-		routers.NewDebugAPIRouter(&handlers.DebugAPIController{}),
-		routers.NewArtifactsAPIRouter(handlers.NewArtifactsAPIController(routerConfig.ArtifactService)))
+		routers.NewDebugAPIRouter(handlers.NewDebugAPIController(routerConfig.SessionService, routerConfig.AgentLoader)),
+		routers.NewArtifactsAPIRouter(handlers.NewArtifactsAPIController(routerConfig.ArtifactService)),
+	)
 }
 
 func setupRouter(router *mux.Router, subrouters ...routers.Router) *mux.Router {
